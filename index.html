@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>DTK6 Departure Information</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="mode-normal">
+  <div id="app">
+    <header id="header">
+      <div class="brand"><span class="brand-main">DTK6</span><span class="brand-sub">DEPARTURE INFORMATION</span></div>
+      <div class="live">● LIVE</div>
+      <div id="offer">--:-- OFFER</div>
+    </header>
+
+    <main id="main">
+      <section id="clockView" class="view active">
+        <canvas id="clockCanvas"></canvas>
+        <div id="digitalClock">--:--:--</div>
+      </section>
+
+      <section id="slideView" class="view">
+        <img id="slideImage" src="" alt="DTK6案内スライド">
+        <div id="slidePlaceholder">
+          <div id="slideTitle">IMAGE</div>
+          <div id="slideMessage">画像を読み込み中</div>
+        </div>
+      </section>
+
+      <section id="messageView" class="view">
+        <div id="messageStatus">CHECK-IN</div>
+        <div id="messageText">受付開始</div>
+      </section>
+    </main>
+
+    <aside id="infoPanel">
+      <div class="infoBlock"><div class="label">STATUS</div><div id="status">NORMAL</div></div>
+      <div class="infoBlock"><div class="label">OTD</div><div id="otdTime">--:--</div></div>
+      <div class="infoBlock remainBlock"><div class="label">NEXT WAVE CHECK IN</div><div id="remaining">00:00</div></div>
+      <div class="infoBlock"><div class="label">NEXT WAVE</div><div id="nextWave">--:--</div></div>
+    </aside>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="clock.js"></script>
+  <script src="scheduler.js"></script>
+  <script src="display.js"></script>
+  <script src="no-sleep.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
