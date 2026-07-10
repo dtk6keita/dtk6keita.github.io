@@ -64,3 +64,44 @@ body.mode-normal #app{background:linear-gradient(180deg,#03101d,#08243a)}body.mo
   #miniClockCanvas{width:94px;height:94px;margin-top:9px}
   #infoPanel{top:286px}
 }
+
+/* ===== Fire Stick overlap fix v5 ===== */
+/* 現在ステータス・次のWAVEを廃止し、右側表示の重なりを防止 */
+#miniClock{
+  top:76px;
+  right:24px;
+  width:226px;
+  height:238px;
+  padding:12px 12px 14px;
+}
+.mini-clock-label{font-size:14px}
+#miniDigitalClock{font-size:34px;margin-top:8px}
+#miniClockCanvas{width:118px;height:118px;margin:12px auto 0}
+#infoPanel{
+  top:334px;
+  right:24px;
+  width:226px;
+  bottom:24px;
+  justify-content:flex-start;
+}
+#infoPanel .infoBlock{padding:16px 0 16px}
+#main{right:274px}
+
+@media (max-width:1280px){
+  #miniClock{top:68px;right:18px;width:204px;height:214px;padding:10px 10px 12px}
+  .mini-clock-label{font-size:12px}
+  #miniDigitalClock{font-size:30px;margin-top:7px}
+  #miniClockCanvas{width:100px;height:100px;margin-top:9px}
+  #infoPanel{top:300px;right:18px;width:204px;bottom:18px;justify-content:flex-start}
+  #main{right:236px}
+}
+
+@media (max-height:650px){
+  #miniClock{top:64px;height:196px}
+  #miniDigitalClock{font-size:28px}
+  #miniClockCanvas{width:88px;height:88px;margin-top:8px}
+  #infoPanel{top:276px}
+  #infoPanel .infoBlock{padding:12px 0}
+  #otdTime{font-size:39px}
+  #remaining{font-size:43px}
+}
