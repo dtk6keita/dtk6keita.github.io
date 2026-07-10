@@ -12,13 +12,22 @@
     <header id="header">
       <div class="brand"><span class="brand-main">DTK6</span><span class="brand-sub">DEPARTURE INFORMATION</span></div>
       <div class="live">● LIVE</div>
-      <div id="offer">--:-- OFFER</div>
+      <div id="offer" aria-label="現在のOFFER">
+        <span class="offer-label">現在のOFFER</span>
+        <span id="offerValue">--:--</span>
+        <span class="offer-unit">OFFER</span>
+      </div>
     </header>
+
+    <div id="miniClock" aria-label="現在時刻">
+      <span class="mini-clock-label">現在時刻</span>
+      <span id="miniDigitalClock">--:--:--</span>
+      <canvas id="miniClockCanvas" aria-label="小型アナログ時計"></canvas>
+    </div>
 
     <main id="main">
       <section id="clockView" class="view active">
         <canvas id="clockCanvas"></canvas>
-        <div id="digitalClock">--:--:--</div>
       </section>
 
       <section id="slideView" class="view">

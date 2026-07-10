@@ -21,11 +21,9 @@ const CONFIG = {
   departDurationMinutes: 1,
   safeDriveDurationSeconds: 30,
 
-  // Fire Stick / Silk Browser向け。時計→画像A→時計→画像B→時計→画像C の順番で切り替えます。
   slideIntervalSeconds: 20,
   alternateClockAndSlides: true,
 
-  // 動作テスト用。通常はfalse。
   demoMode: false,
   demoStartTime: "17:04:50",
 

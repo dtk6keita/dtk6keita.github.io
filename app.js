@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   if (window.FireStickNoSleep) FireStickNoSleep.init();
-
-  new SBBClock("clockCanvas", "digitalClock");
+  new SBBClock("clockCanvas");
+  new SBBClock("miniClockCanvas", null, "miniDigitalClock");
   Display.init();
 
   function loop() {

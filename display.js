@@ -55,7 +55,7 @@ const Display = {
   },
 
   updateInfo(state) {
-    this.setText("offer", `${state.wave} OFFER`);
+    this.setText("offerValue", state.wave);
     this.setText("status", this.statusText(state.mode));
     this.setText("otdTime", state.otdTime);
     this.setText("remaining", state.remaining);

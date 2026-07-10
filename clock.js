@@ -1,8 +1,10 @@
 class SBBClock {
-  constructor(canvasId, digitalId) {
+  constructor(canvasId, digitalId = null, miniDigitalId = null) {
     this.canvas = document.getElementById(canvasId);
+    if (!this.canvas) return;
     this.ctx = this.canvas.getContext("2d");
-    this.digital = document.getElementById(digitalId);
+    this.digital = digitalId ? document.getElementById(digitalId) : null;
+    this.miniDigital = miniDigitalId ? document.getElementById(miniDigitalId) : null;
     window.addEventListener("resize", () => this.resize());
     this.resize();
     this.draw();
@@ -46,7 +48,7 @@ class SBBClock {
     ctx.arc(0, 0, r - 8, 0, Math.PI * 2);
     ctx.fillStyle = "#fff";
     ctx.fill();
-    ctx.lineWidth = 9;
+    ctx.lineWidth = Math.max(3, r * 0.035);
     ctx.strokeStyle = "#111";
     ctx.stroke();
 
@@ -54,9 +56,9 @@ class SBBClock {
       ctx.save();
       ctx.rotate(i * Math.PI / 30);
       ctx.beginPath();
-      ctx.lineWidth = i % 5 === 0 ? 8 : 2.8;
-      ctx.moveTo(0, -r + 30);
-      ctx.lineTo(0, -r + (i % 5 === 0 ? 76 : 56));
+      ctx.lineWidth = i % 5 === 0 ? Math.max(2.5, r * 0.032) : Math.max(1, r * 0.011);
+      ctx.moveTo(0, -r + r * 0.12);
+      ctx.lineTo(0, -r + (i % 5 === 0 ? r * 0.30 : r * 0.22));
       ctx.strokeStyle = "#111";
       ctx.stroke();
       ctx.restore();
@@ -65,15 +67,17 @@ class SBBClock {
     const hour = now.getHours() % 12 + now.getMinutes() / 60;
     const minute = now.getMinutes() + now.getSeconds() / 60;
     const second = now.getSeconds() + now.getMilliseconds() / 1000;
-    this.hand(hour * Math.PI / 6, r * .47, 17, "#111", 30);
-    this.hand(minute * Math.PI / 30, r * .72, 11, "#111", 40);
-    this.hand(second * Math.PI / 30, r * .82, 3.5, "#e21b2d", 50);
+    this.hand(hour * Math.PI / 6, r * .47, Math.max(4, r * .067), "#111", r * .12);
+    this.hand(minute * Math.PI / 30, r * .72, Math.max(3, r * .043), "#111", r * .16);
+    this.hand(second * Math.PI / 30, r * .82, Math.max(1.2, r * .014), "#e21b2d", r * .20);
     ctx.beginPath();
-    ctx.arc(0, 0, 10, 0, Math.PI * 2);
+    ctx.arc(0, 0, Math.max(3, r * .04), 0, Math.PI * 2);
     ctx.fillStyle = "#111";
     ctx.fill();
     ctx.restore();
-    this.digital.textContent = now.toLocaleTimeString("ja-JP", { hour12: false });
+    const timeText = now.toLocaleTimeString("ja-JP", { hour12: false });
+    if (this.digital) this.digital.textContent = timeText;
+    if (this.miniDigital) this.miniDigital.textContent = timeText;
     requestAnimationFrame(() => this.draw());
   }
 }

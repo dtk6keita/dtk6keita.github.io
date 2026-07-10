@@ -1,51 +1,30 @@
-DTK6 GitHub Pages READY版 Fire Stick / Silk Browser対応
+DTK6 GitHub Pages READY版 — ブラッシュアップ v2
 
-このフォルダの中身を GitHub リポジトリ dtk6-dis の直下にアップロードしてください。
-ZIPファイル自体をアップロードしないでください。
+【今回の変更】
+1. どの画面でも時計を確認できます。
+   - 時計画面：中央の大型時計
+   - ポスター・案内画面：右上側のCURRENT TIME時計
+2. 現在のOFFER表示を黄色枠の大型パネルに変更しました。
+3. Fire Stick TV / Silk Browser向けスリープ対策を追加しています。
+4. 「ALERT」「OTD limit」の表記は使用していません。
+5. 時計 → imageA → 時計 → imageB → 時計 → imageC の順で表示します。
 
-アップロードするもの:
-- index.html
-- style.css
-- config.js
-- display.js
-- scheduler.js
-- clock.js
-- no-sleep.js
-- app.js
-- .nojekyll
-- images フォルダ
+【アップロード方法】
+このフォルダの中身をGitHubリポジトリの直下へアップロードしてください。
+ZIPそのものではなく、展開した中身をアップロードします。
 
-GitHub Pages 設定:
-Settings → Pages
-Source: Deploy from a branch
-Branch: main / root
+必要ファイル：
+index.html / style.css / config.js / display.js / scheduler.js / clock.js / no-sleep.js / app.js / .nojekyll / imagesフォルダ
 
-重要:
-リポジトリ直下に index.html が見える状態にしてください。
+GitHub Pages：
+Settings → Pages → Deploy from a branch → main / root
 
-OK:
-dtk6-dis/index.html
-dtk6-dis/images/imageA.png
+リポジトリ直下にindex.htmlが見える状態が正解です。
 
-NG:
-dtk6-dis/DTK6_GitHubPages_READY/index.html
 
-今回の反映内容:
-- 基本デザインはそのまま
-- Fire Stick TV / Silk Browser向けスリープ対策 no-sleep.js を追加
-- 画像切替バグ修正済み
-- remaining要素追加済み
-- 16:9プロジェクター向けサイズ調整
-- GitHub Pages直置き用ファイル構成
-- Actions不要
-- 「ALERT」表記は不使用
-- loading表示は「誘導員に従ってください」
-- OTD limit の limit 表記は不使用
-
-切替順:
-時計表示 → imageA → 時計表示 → imageB → 時計表示 → imageC → 時計表示 → imageA...
-
-切替秒数は config.js の slideIntervalSeconds で変更できます。
-
-補足:
-Fire TV Stick本体やプロジェクター側の省電力設定がONの場合は、そちらもOFFにしてください。
+【ブラッシュアップ V3】
+- CURRENT OFFER → 「現在のOFFER」へ日本語化
+- CURRENT TIME → 「現在時刻」へ日本語化
+- メインアナログ時計下のデジタル時計を廃止
+- 右上の現在時刻デジタル表示の下に小型アナログ時計を追加
+- 時計はポスター・案内・メイン時計のどの画面でも常時表示
