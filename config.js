@@ -29,7 +29,7 @@ const CONFIG = {
 
   slides: [
     { src: "images/imageA.png", title: "All In All Out" },
-    { src: "images/imageB.png", title: "正しく集荷して、エラーゼロへ" },
+    { src: "images/imageB.png", title: "DTK6での集荷ルール" },
     { src: "images/imageC.png", title: "15分前から着車OK" }
   ],
 

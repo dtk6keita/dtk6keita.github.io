@@ -68,6 +68,8 @@ const Scheduler = {
     const departStart = w + CONFIG.departStartMinutesAfterWave;
     const departEnd = departStart + CONFIG.departDurationMinutes;
     const safeEnd = departEnd + CONFIG.safeDriveDurationSeconds / 60;
+    const nextWave = this.findNextWave(wave);
+    const nextCheckinStart = this.toMinutes(nextWave) - CONFIG.checkinStartMinutesBeforeWave;
 
     let mode = "normal";
     if (now >= checkinStart && now < checkinEnd) mode = "checkin";
@@ -82,10 +84,11 @@ const Scheduler = {
 
     return {
       wave,
-      nextWave: this.findNextWave(wave),
+      nextWave,
       mode,
       otdTime: this.formatTime(otdTime),
-      remaining: `${String(rm).padStart(2, "0")}:${String(rs).padStart(2, "0")}`
+      remaining: `${String(rm).padStart(2, "0")}:${String(rs).padStart(2, "0")}`,
+      nextCheckinTime: this.formatTime(nextCheckinStart)
     };
   }
 };

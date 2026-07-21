@@ -17,3 +17,10 @@ ZIPそのものはアップロードしないでください。
 
 リポジトリ直下に index.html が見える状態にします。
 Settings → Pages → Deploy from a branch → main / root
+
+
+【V6修正内容】
+- OTD → 出庫目安時刻
+- NEXT WAVE CHECK IN → 次のチェックイン開始時刻
+- AIAOポスター「指示に従ってください」→「指示にご協力ください」
+- Bagスキャン案内をDTK6の運用ルールと理由が明確に伝わる表現へ変更

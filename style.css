@@ -105,3 +105,9 @@ body.mode-normal #app{background:linear-gradient(180deg,#03101d,#08243a)}body.mo
   #otdTime{font-size:39px}
   #remaining{font-size:43px}
 }
+
+/* ===== 日本語案内 v6 ===== */
+#infoPanel .label{font-size:16px;line-height:1.35;letter-spacing:.2px}
+#nextCheckinTime{margin-top:8px;font-size:48px;font-weight:900;color:#ffe100;letter-spacing:1px}
+@media (max-width:1280px){#infoPanel .label{font-size:14px}#nextCheckinTime{font-size:42px}}
+@media (max-height:650px){#nextCheckinTime{font-size:39px}}
