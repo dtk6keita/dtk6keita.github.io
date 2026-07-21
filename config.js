@@ -35,8 +35,8 @@ const CONFIG = {
 
   messages: {
     checkin: { title: "CHECK-IN", text: "受付開始\n速やかにカウンターまで\nお越しください" },
-    loading: { title: "誘導員に従ってください", text: "出庫まで残り5分程です\n出発の準備を整えましょう" },
-    depart: { title: "DEPART NOW", text: "出庫の時間となりました\n誘導員に従って\n出庫をお願いいたします" },
+    loading: { title: "誘導員従の指示にご協力ください", text: "出庫まで残り5分程です\n出発の準備を整えましょう" },
+    depart: { title: "DEPART NOW", text: "出庫の時間となりました\n誘導員の指示に従って\n出庫をお願いいたします" },
     safe: { title: "SAFE DRIVE", text: "それでは安全運転で\nいってらっしゃいませ" }
   }
 };
