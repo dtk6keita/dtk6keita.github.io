@@ -21,7 +21,7 @@ const CONFIG = {
   departDurationMinutes: 1,
   safeDriveDurationSeconds: 30,
 
-  slideIntervalSeconds: 20,
+  slideIntervalSeconds: 10,
   alternateClockAndSlides: true,
 
   demoMode: false,
