@@ -24,8 +24,11 @@ const CONFIG = {
   slideIntervalSeconds: 10,
   alternateClockAndSlides: true,
 
+  // 通常運用ではfalse。URL末尾に ?demo=1 を付けるとDEMOモードで起動します。
   demoMode: false,
   demoStartTime: "17:04:50",
+  // DEMOの進行倍率。30なら実時間1秒で画面内30秒進みます。
+  demoSpeed: 30,
 
   slides: [
     { src: "images/imageA.png", title: "All In All Out" },
@@ -35,7 +38,7 @@ const CONFIG = {
 
   messages: {
     checkin: { title: "CHECK-IN", text: "受付開始\n速やかにカウンターまで\nお越しください" },
-    loading: { title: "誘導員従の指示にご協力ください", text: "出庫まで残り5分程です\n出発の準備を整えましょう" },
+    loading: { title: "誘導員の指示にご協力ください", text: "出庫まで残り5分程です\n出発の準備を整えましょう" },
     depart: { title: "DEPART NOW", text: "出庫の時間となりました\n誘導員の指示に従って\n出庫をお願いいたします" },
     safe: { title: "SAFE DRIVE", text: "それでは安全運転で\nいってらっしゃいませ" }
   }
