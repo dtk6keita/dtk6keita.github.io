@@ -33,7 +33,8 @@ const CONFIG = {
   slides: [
     { src: "images/imageA.png", title: "All In All Out" },
     { src: "images/imageB.png", title: "DTK6での集荷ルール" },
-    { src: "images/imageC.png", title: "15分前から着車OK" }
+    { src: "images/imageC.png", title: "15分前から着車OK" },
+    { src: "images/imageD.jpg", title: "構内走行中 3つのご協力とお願い" }
   ],
 
   messages: {

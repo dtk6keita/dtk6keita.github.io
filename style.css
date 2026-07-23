@@ -111,3 +111,28 @@ body.mode-normal #app{background:linear-gradient(180deg,#03101d,#08243a)}body.mo
 #nextCheckinTime{margin-top:8px;font-size:48px;font-weight:900;color:#ffe100;letter-spacing:1px}
 @media (max-width:1280px){#infoPanel .label{font-size:14px}#nextCheckinTime{font-size:42px}}
 @media (max-height:650px){#nextCheckinTime{font-size:39px}}
+
+
+/* ===== DEMO mode v7 ===== */
+#demoBadge{
+  display:none;
+  margin-left:14px;
+  padding:5px 11px;
+  border:2px solid #ff4b3e;
+  border-radius:7px;
+  background:#7d0800;
+  color:#fff;
+  font-size:14px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:1px;
+  box-shadow:0 0 12px rgba(255,60,45,.48);
+  white-space:nowrap;
+}
+#demoBadge.active{display:block}
+@media (max-width:1280px){#demoBadge{margin-left:9px;padding:4px 8px;font-size:11px}}
+
+/* ===== 表示色調整 v8.1 ===== */
+/* 出庫目安時刻は黄色、次のチェックイン開始時刻は水色 */
+#otdTime{color:#ffd400;font-weight:900}
+#nextCheckinTime{color:#5ccbff}

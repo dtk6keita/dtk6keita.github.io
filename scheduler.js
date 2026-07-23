@@ -20,10 +20,17 @@ const Scheduler = {
         this.demoBaseReal = Date.now();
         this.demoBaseMinutes = this.toMinutes(CONFIG.demoStartTime);
       }
-      return this.demoBaseMinutes + (Date.now() - this.demoBaseReal) / 60000;
+      const speed = Math.max(0.1, Number(CONFIG.demoSpeed || 1));
+      return this.demoBaseMinutes + ((Date.now() - this.demoBaseReal) / 60000) * speed;
     }
     const now = new Date();
     return now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
+  },
+
+
+  resetDemoClock() {
+    this.demoBaseReal = null;
+    this.demoBaseMinutes = null;
   },
 
   sortedWaves() {
