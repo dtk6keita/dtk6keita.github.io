@@ -12,11 +12,21 @@ const Display = {
       slide: document.getElementById("slideView"),
       message: document.getElementById("messageView")
     };
-    this.slideImage = document.getElementById("slideImage");
-    this.slidePlaceholder = document.getElementById("slidePlaceholder");
-    this.slideTitle = document.getElementById("slideTitle");
-    this.slideMessage = document.getElementById("slideMessage");
+
+    this.slideImage =
+      document.getElementById("slideImage");
+
+    this.slidePlaceholder =
+      document.getElementById("slidePlaceholder");
+
+    this.slideTitle =
+      document.getElementById("slideTitle");
+
+    this.slideMessage =
+      document.getElementById("slideMessage");
+
     this.preloadSlides();
+
     this.showView("clock");
   },
 
@@ -29,9 +39,20 @@ const Display = {
   },
 
   showView(name) {
-    if (!this.views || !this.views[name] || this.currentView === name) return;
-    Object.keys(this.views).forEach((key) => this.views[key].classList.remove("active"));
+    if (
+      !this.views ||
+      !this.views[name] ||
+      this.currentView === name
+    ) {
+      return;
+    }
+
+    Object.keys(this.views).forEach((key) => {
+      this.views[key].classList.remove("active");
+    });
+
     this.views[name].classList.add("active");
+
     this.currentView = name;
   },
 
@@ -51,78 +72,231 @@ const Display = {
 
   setText(id, text) {
     const el = document.getElementById(id);
-    if (el) el.textContent = text;
+
+    if (el) {
+      el.textContent = text;
+    }
   },
 
   updateInfo(state) {
-    this.setText("offerValue", state.wave);
-    this.setText("otdTime", state.otdTime);
-    this.setText("nextCheckinTime", state.nextCheckinTime);
+
+    const offerLabel =
+      document.getElementById("offerLabel");
+
+    const offerValue =
+      document.getElementById("offerValue");
+
+    const nextCheckin =
+      document.getElementById("nextCheckinTime");
+
+    /*
+     * 次回OFFERの場合
+     *
+     * ラベル → 次回OFFER
+     * 時刻 → 次のWave開始時刻
+     * 色 → 次のチェックイン開始時刻と同じ色
+     */
+    if (state.offerIsNext) {
+
+      this.setText(
+        "offerLabel",
+        "次回OFFER"
+      );
+
+      this.setText(
+        "offerValue",
+        state.offerTime
+      );
+
+      if (offerValue && nextCheckin) {
+        const nextCheckinColor =
+          window.getComputedStyle(nextCheckin).color;
+
+        offerValue.style.color =
+          nextCheckinColor;
+      }
+
+    } else {
+
+      /*
+       * 通常の現在OFFER
+       */
+      this.setText(
+        "offerLabel",
+        "現在のOFFER"
+      );
+
+      this.setText(
+        "offerValue",
+        state.offerTime
+      );
+
+      // 通常時はCSSの元の色に戻す
+      if (offerValue) {
+        offerValue.style.color = "";
+      }
+    }
+
+    // 出庫目安
+    this.setText(
+      "otdTime",
+      state.otdTime
+    );
+
+    // 次のチェックイン開始時刻
+    this.setText(
+      "nextCheckinTime",
+      state.nextCheckinTime
+    );
   },
 
   showMessage(mode) {
-    const msg = CONFIG.messages[mode] || CONFIG.messages.checkin;
-    this.setText("messageStatus", msg.title);
-    this.setText("messageText", msg.text);
+    const msg =
+      CONFIG.messages[mode] ||
+      CONFIG.messages.checkin;
+
+    this.setText(
+      "messageStatus",
+      msg.title
+    );
+
+    this.setText(
+      "messageText",
+      msg.text
+    );
+
     this.showView("message");
   },
 
   showSlide() {
-    const slides = CONFIG.slides || [];
+    const slides =
+      CONFIG.slides || [];
+
     if (!slides.length) {
       this.showView("clock");
       return;
     }
 
-    const slide = slides[this.slideIndex % slides.length];
-    this.slideIndex = (this.slideIndex + 1) % slides.length;
+    const slide =
+      slides[
+        this.slideIndex % slides.length
+      ];
 
-    if (this.slideTitle) this.slideTitle.textContent = slide.title || "IMAGE";
-    if (this.slideMessage) this.slideMessage.textContent = "画像を読み込み中";
-    if (this.slidePlaceholder) this.slidePlaceholder.style.display = "flex";
+    this.slideIndex =
+      (this.slideIndex + 1) %
+      slides.length;
+
+    if (this.slideTitle) {
+      this.slideTitle.textContent =
+        slide.title || "IMAGE";
+    }
+
+    if (this.slideMessage) {
+      this.slideMessage.textContent =
+        "画像を読み込み中";
+    }
+
+    if (this.slidePlaceholder) {
+      this.slidePlaceholder.style.display =
+        "flex";
+    }
 
     if (this.slideImage) {
-      this.slideImage.style.display = "none";
+
+      this.slideImage.style.display =
+        "none";
+
       this.slideImage.onload = () => {
-        this.slideImage.style.display = "block";
-        if (this.slidePlaceholder) this.slidePlaceholder.style.display = "none";
+
+        this.slideImage.style.display =
+          "block";
+
+        if (this.slidePlaceholder) {
+          this.slidePlaceholder.style.display =
+            "none";
+        }
       };
+
       this.slideImage.onerror = () => {
-        this.slideImage.style.display = "none";
-        if (this.slidePlaceholder) this.slidePlaceholder.style.display = "flex";
-        if (this.slideMessage) this.slideMessage.textContent = `${slide.src} が見つかりません`;
+
+        this.slideImage.style.display =
+          "none";
+
+        if (this.slidePlaceholder) {
+          this.slidePlaceholder.style.display =
+            "flex";
+        }
+
+        if (this.slideMessage) {
+          this.slideMessage.textContent =
+            `${slide.src} が見つかりません`;
+        }
       };
-      // Silk Browser対策：同じimgタグでも確実に再描画させる
+
+      // Silk Browser対策
       this.slideImage.removeAttribute("src");
-      setTimeout(() => { this.slideImage.src = slide.src; }, 30);
+
+      setTimeout(() => {
+        this.slideImage.src =
+          slide.src;
+      }, 30);
     }
 
     this.showView("slide");
   },
 
   updateMainView(state) {
+
     if (state.mode !== this.lastMode) {
-      this.lastMode = state.mode;
+
+      this.lastMode =
+        state.mode;
+
       this.lastSwitch = 0;
+
       this.showClockNext = false;
     }
 
     if (state.mode !== "normal") {
-      this.showMessage(state.mode);
+
+      this.showMessage(
+        state.mode
+      );
+
       return;
     }
 
     const now = Date.now();
-    const interval = Math.max(5, Number(CONFIG.slideIntervalSeconds || 20)) * 1000;
 
-    if (!this.lastSwitch || now - this.lastSwitch >= interval) {
+    const interval =
+      Math.max(
+        5,
+        Number(
+          CONFIG.slideIntervalSeconds || 20
+        )
+      ) * 1000;
+
+    if (
+      !this.lastSwitch ||
+      now - this.lastSwitch >= interval
+    ) {
+
       this.lastSwitch = now;
-      if (CONFIG.alternateClockAndSlides && this.showClockNext) {
+
+      if (
+        CONFIG.alternateClockAndSlides &&
+        this.showClockNext
+      ) {
+
         this.showView("clock");
+
       } else {
+
         this.showSlide();
       }
-      this.showClockNext = !this.showClockNext;
+
+      this.showClockNext =
+        !this.showClockNext;
     }
   }
 };
