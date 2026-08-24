@@ -8,9 +8,14 @@ const Display = {
 
   init() {
     this.views = {
-      clock: document.getElementById("clockView"),
-      slide: document.getElementById("slideView"),
-      message: document.getElementById("messageView")
+      clock:
+        document.getElementById("clockView"),
+
+      slide:
+        document.getElementById("slideView"),
+
+      message:
+        document.getElementById("messageView")
     };
 
     this.slideImage =
@@ -33,7 +38,9 @@ const Display = {
   preloadSlides() {
     (CONFIG.slides || []).forEach((slide) => {
       const img = new Image();
+
       img.src = slide.src;
+
       this.preloaded.push(img);
     });
   },
@@ -48,16 +55,21 @@ const Display = {
     }
 
     Object.keys(this.views).forEach((key) => {
-      this.views[key].classList.remove("active");
+      this.views[key]
+        .classList
+        .remove("active");
     });
 
-    this.views[name].classList.add("active");
+    this.views[name]
+      .classList
+      .add("active");
 
     this.currentView = name;
   },
 
   setModeClass(mode) {
-    document.body.className = `mode-${mode}`;
+    document.body.className =
+      `mode-${mode}`;
   },
 
   statusText(mode) {
@@ -71,7 +83,8 @@ const Display = {
   },
 
   setText(id, text) {
-    const el = document.getElementById(id);
+    const el =
+      document.getElementById(id);
 
     if (el) {
       el.textContent = text;
@@ -79,25 +92,30 @@ const Display = {
   },
 
   updateInfo(state) {
+
+    const offerLabel =
+      document.getElementById(
+        "offerLabel"
+      );
+
     const offerValue =
-      document.getElementById("offerValue");
+      document.getElementById(
+        "offerValue"
+      );
 
     /*
-     * 次回OFFERの場合
+     * 次回OFFER
      */
     if (state.offerIsNext) {
 
       this.setText(
-        "offerValue",
-        state.offerTime
-      );
-
-      /*
-       * ラベルを「次回OFFER」に変更
-       */
-      this.setText(
         "offerLabel",
         "次回OFFER"
+      );
+
+      this.setText(
+        "offerValue",
+        state.offerTime
       );
 
       /*
@@ -105,32 +123,43 @@ const Display = {
        * 同じ青色にする
        */
       const nextCheckin =
-        document.getElementById("nextCheckinTime");
+        document.getElementById(
+          "nextCheckinTime"
+        );
 
-      if (offerValue && nextCheckin) {
+      if (
+        offerValue &&
+        nextCheckin
+      ) {
         const color =
-          window.getComputedStyle(nextCheckin).color;
+          window.getComputedStyle(
+            nextCheckin
+          ).color;
 
-        offerValue.style.color = color;
+        offerValue.style.color =
+          color;
       }
 
-    } else {
+    }
 
-      /*
-       * 通常の現在OFFER
-       */
-      this.setText(
-        "offerValue",
-        state.offerTime
-      );
+    /*
+     * 現在OFFER
+     */
+    else {
 
       this.setText(
         "offerLabel",
         "現在のOFFER"
       );
 
+      this.setText(
+        "offerValue",
+        state.offerTime
+      );
+
       /*
-       * 元のCSSカラーに戻す
+       * CSSで設定されている
+       * 元の色に戻す
        */
       if (offerValue) {
         offerValue.style.color = "";
@@ -155,6 +184,7 @@ const Display = {
   },
 
   showMessage(mode) {
+
     const msg =
       CONFIG.messages[mode] ||
       CONFIG.messages.checkin;
@@ -173,6 +203,7 @@ const Display = {
   },
 
   showSlide() {
+
     const slides =
       CONFIG.slides || [];
 
@@ -183,11 +214,13 @@ const Display = {
 
     const slide =
       slides[
-        this.slideIndex % slides.length
+        this.slideIndex %
+        slides.length
       ];
 
     this.slideIndex =
-      (this.slideIndex + 1) % slides.length;
+      (this.slideIndex + 1) %
+      slides.length;
 
     if (this.slideTitle) {
       this.slideTitle.textContent =
@@ -210,6 +243,7 @@ const Display = {
         "none";
 
       this.slideImage.onload = () => {
+
         this.slideImage.style.display =
           "block";
 
@@ -220,6 +254,7 @@ const Display = {
       };
 
       this.slideImage.onerror = () => {
+
         this.slideImage.style.display =
           "none";
 
@@ -237,7 +272,8 @@ const Display = {
       /*
        * Silk Browser対策
        */
-      this.slideImage.removeAttribute("src");
+      this.slideImage
+        .removeAttribute("src");
 
       setTimeout(() => {
         this.slideImage.src =
@@ -249,17 +285,29 @@ const Display = {
   },
 
   updateMainView(state) {
-    if (state.mode !== this.lastMode) {
+
+    if (
+      state.mode !==
+      this.lastMode
+    ) {
 
       this.lastMode =
         state.mode;
 
       this.lastSwitch = 0;
 
-      this.showClockNext = false;
+      this.showClockNext =
+        false;
     }
 
-    if (state.mode !== "normal") {
+    /*
+     * SAFE DRIVE中
+     */
+    if (
+      state.mode !==
+      "normal"
+    ) {
+
       this.showMessage(
         state.mode
       );
@@ -267,29 +315,39 @@ const Display = {
       return;
     }
 
-    const now = Date.now();
+    const now =
+      Date.now();
 
     const interval =
       Math.max(
         5,
         Number(
-          CONFIG.slideIntervalSeconds || 20
+          CONFIG.slideIntervalSeconds ||
+          20
         )
       ) * 1000;
 
     if (
       !this.lastSwitch ||
-      now - this.lastSwitch >= interval
+      now - this.lastSwitch >=
+      interval
     ) {
 
-      this.lastSwitch = now;
+      this.lastSwitch =
+        now;
 
       if (
         CONFIG.alternateClockAndSlides &&
         this.showClockNext
       ) {
-        this.showView("clock");
-      } else {
+
+        this.showView(
+          "clock"
+        );
+
+      }
+      else {
+
         this.showSlide();
       }
 

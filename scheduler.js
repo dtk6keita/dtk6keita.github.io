@@ -9,8 +9,10 @@ const Scheduler = {
 
   formatTime(totalMinutes) {
     totalMinutes = ((totalMinutes % 1440) + 1440) % 1440;
+
     const h = Math.floor(totalMinutes / 60);
     const m = Math.floor(totalMinutes % 60);
+
     return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
   },
 
@@ -21,7 +23,10 @@ const Scheduler = {
         this.demoBaseMinutes = this.toMinutes(CONFIG.demoStartTime);
       }
 
-      const speed = Math.max(0.1, Number(CONFIG.demoSpeed || 1));
+      const speed = Math.max(
+        0.1,
+        Number(CONFIG.demoSpeed || 1)
+      );
 
       return this.demoBaseMinutes +
         ((Date.now() - this.demoBaseReal) / 60000) * speed;
@@ -42,20 +47,27 @@ const Scheduler = {
   sortedWaves() {
     return (CONFIG.waves || [])
       .slice()
-      .sort((a, b) => this.toMinutes(a) - this.toMinutes(b));
+      .sort(
+        (a, b) =>
+          this.toMinutes(a) -
+          this.toMinutes(b)
+      );
   },
 
   findWave() {
     const now = this.nowMinutes();
     const waves = this.sortedWaves();
 
-    if (!waves.length) return "--:--";
+    if (!waves.length) {
+      return "--:--";
+    }
 
     for (const wave of waves) {
       const w = this.toMinutes(wave);
 
       const start =
-        w - CONFIG.checkinStartMinutesBeforeWave;
+        w -
+        CONFIG.checkinStartMinutesBeforeWave;
 
       const end =
         w +
@@ -82,11 +94,17 @@ const Scheduler = {
   findNextWave(currentWave) {
     const waves = this.sortedWaves();
 
-    if (!waves.length) return "--:--";
+    if (!waves.length) {
+      return "--:--";
+    }
 
-    const idx = waves.indexOf(currentWave);
+    const idx =
+      waves.indexOf(currentWave);
 
-    if (idx >= 0 && idx < waves.length - 1) {
+    if (
+      idx >= 0 &&
+      idx < waves.length - 1
+    ) {
       return waves[idx + 1];
     }
 
@@ -111,28 +129,36 @@ const Scheduler = {
       };
     }
 
-    const w = this.toMinutes(wave);
+    const w =
+      this.toMinutes(wave);
 
     /*
-     * 現在Waveの各種時刻
+     * 現在Wave
      */
+
     const checkinStart =
-      w - CONFIG.checkinStartMinutesBeforeWave;
+      w -
+      CONFIG.checkinStartMinutesBeforeWave;
 
     const checkinEnd =
       checkinStart +
       CONFIG.checkinDurationMinutes;
 
     const loadingStart =
-      w + CONFIG.loadingStartMinutesAfterWave;
+      w +
+      CONFIG.loadingStartMinutesAfterWave;
 
     const departStart =
-      w + CONFIG.departStartMinutesAfterWave;
+      w +
+      CONFIG.departStartMinutesAfterWave;
 
     const departEnd =
       departStart +
       CONFIG.departDurationMinutes;
 
+    /*
+     * SAFE DRIVE終了時刻
+     */
     const safeEnd =
       departEnd +
       CONFIG.safeDriveDurationSeconds / 60;
@@ -149,34 +175,31 @@ const Scheduler = {
     /*
      * 次のチェックイン開始
      */
-    const nextCheckinStart =
+    let nextCheckinStart =
       nextWaveMinutes -
       CONFIG.checkinStartMinutesBeforeWave;
 
     /*
-     * 現在時刻から次のチェックイン開始まで
+     * SAFE DRIVE終了後、
+     * 次のOFFER時刻になるまで
+     * 「次回OFFER」を表示する。
      *
-     * 日付またぎ対応
+     * SAFE DRIVE終了
+     *       ↓
+     * 次回OFFER
+     *       ↓
+     * 次のWave時刻
+     *       ↓
+     * 現在のOFFER
      */
-    let timeToNextCheckin =
-      nextCheckinStart - now;
 
-    if (timeToNextCheckin < 0) {
-      timeToNextCheckin += 1440;
-    }
+    const offerIsNext =
+      now >= safeEnd &&
+      now < nextWaveMinutes;
 
     /*
-     * OFFER判定
-     *
-     * 次のチェックインまで1時間以上
-     * → 次回OFFER
-     *
-     * それ以外
-     * → 現在のOFFER
+     * 表示するOFFER
      */
-    const offerIsNext =
-      timeToNextCheckin >= 60;
-
     const offerMinutes =
       offerIsNext
         ? nextWaveMinutes
@@ -188,28 +211,27 @@ const Scheduler = {
     /*
      * 出庫目安
      *
-     * 必ず「現在表示しているOFFERの15分後」
-     *
-     * 現在OFFER 17:15 → 17:30
-     * 次回OFFER 18:00 → 18:15
+     * OFFERの15分後
      */
     const otdTime =
       offerMinutes + 15;
 
     /*
-     * 現在のOFFERの出庫目安までの残り時間
-     *
-     * ※画面表示用
+     * 出庫目安までの残り時間
      */
     let remainSec =
-      Math.floor((otdTime - now) * 60);
+      Math.floor(
+        (otdTime - now) * 60
+      );
 
     if (remainSec < 0) {
       remainSec = 0;
     }
 
     const rm =
-      Math.floor(remainSec / 60);
+      Math.floor(
+        remainSec / 60
+      );
 
     const rs =
       remainSec % 60;
@@ -219,16 +241,28 @@ const Scheduler = {
      */
     let mode = "normal";
 
-    if (now >= checkinStart && now < checkinEnd) {
+    if (
+      now >= checkinStart &&
+      now < checkinEnd
+    ) {
       mode = "checkin";
     }
-    else if (now >= loadingStart && now < departStart) {
+    else if (
+      now >= loadingStart &&
+      now < departStart
+    ) {
       mode = "loading";
     }
-    else if (now >= departStart && now < departEnd) {
+    else if (
+      now >= departStart &&
+      now < departEnd
+    ) {
       mode = "depart";
     }
-    else if (now >= departEnd && now < safeEnd) {
+    else if (
+      now >= departEnd &&
+      now < safeEnd
+    ) {
       mode = "safe";
     }
 
@@ -247,7 +281,7 @@ const Scheduler = {
         this.formatTime(otdTime),
 
       /*
-       * 現在OFFER / 次回OFFER
+       * OFFER
        */
       offerTime:
         offerTime,
@@ -268,7 +302,9 @@ const Scheduler = {
        * 次のチェックイン開始時刻
        */
       nextCheckinTime:
-        this.formatTime(nextCheckinStart)
+        this.formatTime(
+          nextCheckinStart
+        )
     };
   }
 };
