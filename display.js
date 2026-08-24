@@ -93,18 +93,13 @@ const Display = {
 
   updateInfo(state) {
 
-    const offerLabel =
-      document.getElementById(
-        "offerLabel"
-      );
-
     const offerValue =
       document.getElementById(
         "offerValue"
       );
 
     /*
-     * 次回OFFER
+     * OFFERラベル
      */
     if (state.offerIsNext) {
 
@@ -113,56 +108,39 @@ const Display = {
         "次回OFFER"
       );
 
-      this.setText(
-        "offerValue",
-        state.offerTime
-      );
-
-      /*
-       * 次のチェックイン開始時刻と
-       * 同じ青色にする
-       */
-      const nextCheckin =
-        document.getElementById(
-          "nextCheckinTime"
-        );
-
-      if (
-        offerValue &&
-        nextCheckin
-      ) {
-        const color =
-          window.getComputedStyle(
-            nextCheckin
-          ).color;
-
-        offerValue.style.color =
-          color;
-      }
-
-    }
-
-    /*
-     * 現在OFFER
-     */
-    else {
+    } else {
 
       this.setText(
         "offerLabel",
         "現在のOFFER"
       );
+    }
 
-      this.setText(
-        "offerValue",
-        state.offerTime
-      );
+    /*
+     * OFFER時刻
+     */
+    this.setText(
+      "offerValue",
+      state.offerTime
+    );
 
-      /*
-       * CSSで設定されている
-       * 元の色に戻す
-       */
-      if (offerValue) {
-        offerValue.style.color = "";
+    /*
+     * OFFERの色
+     *
+     * 現在のOFFER → 白
+     * 次回OFFER → 水色
+     */
+    if (offerValue) {
+
+      if (state.offerIsNext) {
+
+        offerValue.style.color =
+          "#7DDCFF";
+
+      } else {
+
+        offerValue.style.color =
+          "#FFFFFF";
       }
     }
 
@@ -345,8 +323,7 @@ const Display = {
           "clock"
         );
 
-      }
-      else {
+      } else {
 
         this.showSlide();
       }

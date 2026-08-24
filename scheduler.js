@@ -20,7 +20,8 @@ const Scheduler = {
     if (CONFIG.demoMode) {
       if (!this.demoBaseReal) {
         this.demoBaseReal = Date.now();
-        this.demoBaseMinutes = this.toMinutes(CONFIG.demoStartTime);
+        this.demoBaseMinutes =
+          this.toMinutes(CONFIG.demoStartTime);
       }
 
       const speed = Math.max(
@@ -133,9 +134,8 @@ const Scheduler = {
       this.toMinutes(wave);
 
     /*
-     * 現在Wave
+     * 現在Waveのチェックイン
      */
-
     const checkinStart =
       w -
       CONFIG.checkinStartMinutesBeforeWave;
@@ -144,20 +144,29 @@ const Scheduler = {
       checkinStart +
       CONFIG.checkinDurationMinutes;
 
+    /*
+     * 積込み開始
+     */
     const loadingStart =
       w +
       CONFIG.loadingStartMinutesAfterWave;
 
+    /*
+     * 出庫開始
+     */
     const departStart =
       w +
       CONFIG.departStartMinutesAfterWave;
 
+    /*
+     * 出庫終了
+     */
     const departEnd =
       departStart +
       CONFIG.departDurationMinutes;
 
     /*
-     * SAFE DRIVE終了時刻
+     * SAFE DRIVE終了
      */
     const safeEnd =
       departEnd +
@@ -173,26 +182,21 @@ const Scheduler = {
       this.toMinutes(nextWave);
 
     /*
-     * 次のチェックイン開始
+     * 次のWaveのチェックイン開始時刻
+     *
+     * 現在のOFFER中でも、
+     * 常に次のWaveのチェックイン開始時刻を表示
      */
-    let nextCheckinStart =
+    const nextCheckinStart =
       nextWaveMinutes -
       CONFIG.checkinStartMinutesBeforeWave;
 
     /*
-     * SAFE DRIVE終了後、
-     * 次のOFFER時刻になるまで
-     * 「次回OFFER」を表示する。
+     * SAFE DRIVE終了後から
+     * 次のWave開始まで
      *
-     * SAFE DRIVE終了
-     *       ↓
-     * 次回OFFER
-     *       ↓
-     * 次のWave時刻
-     *       ↓
-     * 現在のOFFER
+     * 「次回OFFER」を表示
      */
-
     const offerIsNext =
       now >= safeEnd &&
       now < nextWaveMinutes;
@@ -211,7 +215,7 @@ const Scheduler = {
     /*
      * 出庫目安
      *
-     * OFFERの15分後
+     * 表示しているOFFERの15分後
      */
     const otdTime =
       offerMinutes + 15;
@@ -281,7 +285,7 @@ const Scheduler = {
         this.formatTime(otdTime),
 
       /*
-       * OFFER
+       * 現在OFFER / 次回OFFER
        */
       offerTime:
         offerTime,
@@ -293,18 +297,16 @@ const Scheduler = {
         offerIsNext,
 
       /*
-       * 出庫目安までの残り時間
+       * 出庫目安までの残り
        */
       remaining:
         `${String(rm).padStart(2, "0")}:${String(rs).padStart(2, "0")}`,
 
       /*
-       * 次のチェックイン開始時刻
+       * 次のWaveのチェックイン開始時刻
        */
       nextCheckinTime:
-        this.formatTime(
-          nextCheckinStart
-        )
+        this.formatTime(nextCheckinStart)
     };
   }
 };
