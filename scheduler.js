@@ -113,83 +113,48 @@ const Scheduler = {
 
     const w = this.toMinutes(wave);
 
-    // 現在Waveの出庫目安
-    const otdTime =
-      w +
-      CONFIG.otdMinutes -
-      CONFIG.dtk6BufferMinutes;
-
-    // 現在Waveのチェックイン開始
+    /*
+     * 現在Waveの各種時刻
+     */
     const checkinStart =
-      w -
-      CONFIG.checkinStartMinutesBeforeWave;
+      w - CONFIG.checkinStartMinutesBeforeWave;
 
     const checkinEnd =
       checkinStart +
       CONFIG.checkinDurationMinutes;
 
-    // 積込み開始
     const loadingStart =
-      w +
-      CONFIG.loadingStartMinutesAfterWave;
+      w + CONFIG.loadingStartMinutesAfterWave;
 
-    // 出庫開始
     const departStart =
-      w +
-      CONFIG.departStartMinutesAfterWave;
+      w + CONFIG.departStartMinutesAfterWave;
 
     const departEnd =
       departStart +
       CONFIG.departDurationMinutes;
 
-    // 安全運転表示終了
     const safeEnd =
       departEnd +
       CONFIG.safeDriveDurationSeconds / 60;
 
-    // 次のWave
+    /*
+     * 次のWave
+     */
     const nextWave =
       this.findNextWave(wave);
 
     const nextWaveMinutes =
       this.toMinutes(nextWave);
 
-    // 次のWaveまでの時間
-    let gapToNext =
-      nextWaveMinutes - w;
-
-    // 日付またぎ対応
-    if (gapToNext < 0) {
-      gapToNext += 1440;
-    }
-
-    // 次のWaveの出庫目安
-    const nextOtdTime =
-      nextWaveMinutes +
-      CONFIG.otdMinutes -
-      CONFIG.dtk6BufferMinutes;
-
     /*
-     * 出庫目安表示
-     *
-     * 次のWaveまで30分以上空いている場合
-     * → 次のWaveの出庫目安
-     *
-     * 30分未満の場合
-     * → 現在Waveの出庫目安
+     * 次のチェックイン開始
      */
-    const displayOtdTime =
-      gapToNext >= 30
-        ? nextOtdTime
-        : otdTime;
-
-    // 次のチェックイン開始時刻
-    let nextCheckinStart =
+    const nextCheckinStart =
       nextWaveMinutes -
       CONFIG.checkinStartMinutesBeforeWave;
 
     /*
-     * 現在時刻から次のチェックイン開始までの時間
+     * 現在時刻から次のチェックイン開始まで
      *
      * 日付またぎ対応
      */
@@ -201,25 +166,41 @@ const Scheduler = {
     }
 
     /*
-     * 現在のOFFER / 次回OFFER
+     * OFFER判定
      *
-     * 次のチェックイン開始まで1時間以上ある場合
-     * → 「次回OFFER」
-     * → 次のWaveの開始時刻を表示
+     * 次のチェックインまで1時間以上
+     * → 次回OFFER
      *
-     * 1時間未満になったら
-     * → 「現在のOFFER」
-     * → 現在Waveを表示
+     * それ以外
+     * → 現在のOFFER
      */
     const offerIsNext =
       timeToNextCheckin >= 60;
 
-    const offerTime =
+    const offerMinutes =
       offerIsNext
-        ? nextWave
-        : wave;
+        ? nextWaveMinutes
+        : w;
 
-    // 現在Waveの出庫目安までの残り時間
+    const offerTime =
+      this.formatTime(offerMinutes);
+
+    /*
+     * 出庫目安
+     *
+     * 必ず「現在表示しているOFFERの15分後」
+     *
+     * 現在OFFER 17:15 → 17:30
+     * 次回OFFER 18:00 → 18:15
+     */
+    const otdTime =
+      offerMinutes + 15;
+
+    /*
+     * 現在のOFFERの出庫目安までの残り時間
+     *
+     * ※画面表示用
+     */
     let remainSec =
       Math.floor((otdTime - now) * 60);
 
@@ -233,7 +214,9 @@ const Scheduler = {
     const rs =
       remainSec % 60;
 
-    // 現在のモード
+    /*
+     * モード判定
+     */
     let mode = "normal";
 
     if (now >= checkinStart && now < checkinEnd) {
@@ -256,20 +239,34 @@ const Scheduler = {
 
       mode: mode,
 
-      // 出庫目安
-      otdTime: this.formatTime(displayOtdTime),
+      /*
+       * 出庫目安
+       * OFFER + 15分
+       */
+      otdTime:
+        this.formatTime(otdTime),
 
-      // OFFER
-      offerTime: offerTime,
+      /*
+       * 現在OFFER / 次回OFFER
+       */
+      offerTime:
+        offerTime,
 
-      // 次回OFFERかどうか
-      offerIsNext: offerIsNext,
+      /*
+       * 次回OFFER表示中か
+       */
+      offerIsNext:
+        offerIsNext,
 
-      // 現在Waveの出庫目安までの残り時間
+      /*
+       * 出庫目安までの残り時間
+       */
       remaining:
         `${String(rm).padStart(2, "0")}:${String(rs).padStart(2, "0")}`,
 
-      // 次のチェックイン開始時刻
+      /*
+       * 次のチェックイン開始時刻
+       */
       nextCheckinTime:
         this.formatTime(nextCheckinStart)
     };

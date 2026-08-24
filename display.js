@@ -79,41 +79,39 @@ const Display = {
   },
 
   updateInfo(state) {
-
-    const offerLabel =
-      document.getElementById("offerLabel");
-
     const offerValue =
       document.getElementById("offerValue");
 
-    const nextCheckin =
-      document.getElementById("nextCheckinTime");
-
     /*
      * 次回OFFERの場合
-     *
-     * ラベル → 次回OFFER
-     * 時刻 → 次のWave開始時刻
-     * 色 → 次のチェックイン開始時刻と同じ色
      */
     if (state.offerIsNext) {
-
-      this.setText(
-        "offerLabel",
-        "次回OFFER"
-      );
 
       this.setText(
         "offerValue",
         state.offerTime
       );
 
+      /*
+       * ラベルを「次回OFFER」に変更
+       */
+      this.setText(
+        "offerLabel",
+        "次回OFFER"
+      );
+
+      /*
+       * 次のチェックイン開始時刻と
+       * 同じ青色にする
+       */
+      const nextCheckin =
+        document.getElementById("nextCheckinTime");
+
       if (offerValue && nextCheckin) {
-        const nextCheckinColor =
+        const color =
           window.getComputedStyle(nextCheckin).color;
 
-        offerValue.style.color =
-          nextCheckinColor;
+        offerValue.style.color = color;
       }
 
     } else {
@@ -122,28 +120,34 @@ const Display = {
        * 通常の現在OFFER
        */
       this.setText(
-        "offerLabel",
-        "現在のOFFER"
-      );
-
-      this.setText(
         "offerValue",
         state.offerTime
       );
 
-      // 通常時はCSSの元の色に戻す
+      this.setText(
+        "offerLabel",
+        "現在のOFFER"
+      );
+
+      /*
+       * 元のCSSカラーに戻す
+       */
       if (offerValue) {
         offerValue.style.color = "";
       }
     }
 
-    // 出庫目安
+    /*
+     * 出庫目安
+     */
     this.setText(
       "otdTime",
       state.otdTime
     );
 
-    // 次のチェックイン開始時刻
+    /*
+     * 次のチェックイン開始時刻
+     */
     this.setText(
       "nextCheckinTime",
       state.nextCheckinTime
@@ -183,8 +187,7 @@ const Display = {
       ];
 
     this.slideIndex =
-      (this.slideIndex + 1) %
-      slides.length;
+      (this.slideIndex + 1) % slides.length;
 
     if (this.slideTitle) {
       this.slideTitle.textContent =
@@ -207,7 +210,6 @@ const Display = {
         "none";
 
       this.slideImage.onload = () => {
-
         this.slideImage.style.display =
           "block";
 
@@ -218,7 +220,6 @@ const Display = {
       };
 
       this.slideImage.onerror = () => {
-
         this.slideImage.style.display =
           "none";
 
@@ -233,7 +234,9 @@ const Display = {
         }
       };
 
-      // Silk Browser対策
+      /*
+       * Silk Browser対策
+       */
       this.slideImage.removeAttribute("src");
 
       setTimeout(() => {
@@ -246,7 +249,6 @@ const Display = {
   },
 
   updateMainView(state) {
-
     if (state.mode !== this.lastMode) {
 
       this.lastMode =
@@ -258,7 +260,6 @@ const Display = {
     }
 
     if (state.mode !== "normal") {
-
       this.showMessage(
         state.mode
       );
@@ -287,11 +288,8 @@ const Display = {
         CONFIG.alternateClockAndSlides &&
         this.showClockNext
       ) {
-
         this.showView("clock");
-
       } else {
-
         this.showSlide();
       }
 
