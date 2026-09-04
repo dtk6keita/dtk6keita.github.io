@@ -1,12 +1,11 @@
 const CONFIG = {
   // 対象Wave
   waves: [
-    "02:15", "02:30",
     "09:00", "09:15", "09:30", "09:45",
     "10:00", "10:15", "10:30", "10:45",
     "11:00", "11:15", "11:30", "11:45",
     "17:15", "17:30", "17:45",
-    "18:00", "18:30",
+    "18:00", "18:15", "18:30",
     "19:00", "19:30",
     "20:00", "20:30"
   ],
@@ -16,8 +15,8 @@ const CONFIG = {
   dtk6BufferMinutes: 0,
 
   // CHECK-IN
-  checkinStartMinutesBeforeWave: 10,
-  checkinDurationMinutes: 3,
+  checkinStartMinutesBeforeWave: 15,
+  checkinDurationMinutes: 2,
 
   // 案内画面のタイミング
   loadingStartMinutesAfterWave: 5,
@@ -26,7 +25,7 @@ const CONFIG = {
   safeDriveDurationSeconds: 30,
 
   // 通常時：時計 → ポスター → 時計 → ポスター…
-  slideIntervalSeconds: 20,
+  slideIntervalSeconds: 10,
   alternateClockAndSlides: true,
 
   // 動作テスト用。通常運用はfalse。
