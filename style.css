@@ -1,13 +1,13 @@
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#EEF1F4}
-body{color:#20242A;font-family:Arial,"Helvetica Neue","Noto Sans JP",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
-#app{width:100vw;height:100vh;position:relative;overflow:hidden;background:#EEF1F4}
+html,body{width:100%;height:100%;overflow:hidden;background:#03101D}
+body{color:#FFFFFF;font-family:Arial,"Helvetica Neue","Noto Sans JP",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+#app{width:100vw;height:100vh;position:relative;overflow:hidden;background:transparent}
 
 /* ===== V12: projector-friendly light theme ===== */
 #header{
   position:absolute;top:0;left:0;right:0;height:92px;z-index:20;
   display:flex;align-items:center;gap:12px;padding:10px 20px;
-  background:#FFFFFF;border-bottom:3px solid #D4D9DE;
+  background:transparent;border-bottom:3px solid rgba(255,255,255,.22);
   box-shadow:0 3px 12px rgba(0,0,0,.12)
 }
 .brand{width:190px;flex:0 0 190px;display:flex;flex-direction:column;justify-content:center;line-height:1;white-space:nowrap}
@@ -41,7 +41,7 @@ body{color:#20242A;font-family:Arial,"Helvetica Neue","Noto Sans JP",sans-serif;
 #miniDigitalClock{display:block;margin-top:8px;font-size:32px;line-height:1;font-weight:950;letter-spacing:1px;color:#20242A;font-variant-numeric:tabular-nums}
 #miniClockCanvas{display:block;width:116px;height:116px;margin:11px auto 0;filter:drop-shadow(0 4px 7px rgba(0,0,0,.18))}
 
-#main{position:absolute;top:92px;left:0;right:0;bottom:0;padding:14px 246px 14px 14px;background:#EEF1F4}
+#main{position:absolute;top:92px;left:0;right:0;bottom:0;padding:14px 246px 14px 14px;background:transparent}
 .view{position:absolute;inset:14px 246px 14px 14px;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .35s ease}
 .view.active{opacity:1;pointer-events:auto}
 
@@ -60,24 +60,23 @@ body{color:#20242A;font-family:Arial,"Helvetica Neue","Noto Sans JP",sans-serif;
 #messageStatus{font-size:78px;font-weight:950;letter-spacing:3px;line-height:1.05;color:#20242A}
 #messageText{margin-top:28px;font-size:40px;line-height:1.5;white-space:pre-line;font-weight:900;color:#20242A}
 
-/* モード別：プロジェクター上で見分けやすい明るい色 */
-body.mode-normal #app{background:#EEF1F4}
-body.mode-checkin #app{background:#DDF5F6}
-body.mode-checkin #header{border-bottom-color:#20A6A8}
-body.mode-checkin #messageStatus{color:#087F83}
-body.mode-checkin #messageText{color:#18383A}
-body.mode-loading #app{background:#FFF0B8}
-body.mode-loading #header{border-bottom-color:#E1A900}
-body.mode-loading #messageStatus{color:#8A5700}
-body.mode-loading #messageText{color:#3B2B0A}
-body.mode-depart #app{background:#FFE0DE}
-body.mode-depart #header{border-bottom-color:#E53935}
-body.mode-depart #messageStatus{color:#D21F1F}
-body.mode-depart #messageText{color:#4B1616}
-body.mode-safe #app{background:#E0F4E6}
-body.mode-safe #header{border-bottom-color:#2E9E50}
-body.mode-safe #messageStatus{color:#16723A}
-body.mode-safe #messageText{color:#173C24}
+/* V9系：時間帯ごとに画面全体を切り替えるモードカラー */
+body.mode-normal, body.mode-normal #app{background:linear-gradient(180deg,#03101d,#08243a)}
+body.mode-checkin, body.mode-checkin #app{background:linear-gradient(180deg,#004b9b,#0b6fbf)}
+body.mode-loading, body.mode-loading #app{background:linear-gradient(180deg,#9f7900,#f4b400)}
+body.mode-depart, body.mode-depart #app{background:linear-gradient(180deg,#a83b00,#ef6c00)}
+body.mode-safe, body.mode-safe #app{background:linear-gradient(180deg,#07592b,#168d43)}
+body.mode-checkin #header,body.mode-loading #header,body.mode-depart #header,body.mode-safe #header{background:transparent;border-bottom-color:rgba(255,255,255,.25)}
+body.mode-checkin .headerLabel,body.mode-loading .headerLabel,body.mode-depart .headerLabel,body.mode-safe .headerLabel,
+body.mode-checkin .headerValue,body.mode-loading .headerValue,body.mode-depart .headerValue,body.mode-safe .headerValue,
+body.mode-checkin .brand-sub,body.mode-loading .brand-sub,body.mode-depart .brand-sub,body.mode-safe .brand-sub,
+body.mode-checkin #miniClock,body.mode-loading #miniClock,body.mode-depart #miniClock,body.mode-safe #miniClock{color:#fff}
+body.mode-checkin .headerCard,body.mode-loading .headerCard,body.mode-depart .headerCard,body.mode-safe .headerCard{background:rgba(0,0,0,.12);border-color:rgba(255,255,255,.35);box-shadow:none}
+body.mode-checkin #messageStatus,body.mode-checkin #messageText,body.mode-loading #messageStatus,body.mode-loading #messageText,body.mode-depart #messageStatus,body.mode-depart #messageText,body.mode-safe #messageStatus,body.mode-safe #messageText{color:#fff;text-shadow:0 4px 16px rgba(0,0,0,.3)}
+body.mode-loading #messageStatus{font-size:70px}
+body.mode-loading .otdValue{color:#fff!important}
+body.mode-depart .otdValue{color:#fff!important}
+body.mode-safe .otdValue{color:#fff!important}
 
 .keep-alive-element{position:fixed!important;left:-20px!important;top:-20px!important;width:2px!important;height:2px!important;opacity:.001!important;pointer-events:none!important}
 
