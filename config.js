@@ -17,7 +17,7 @@ const CONFIG = {
 
   // CHECK-IN
   checkinStartMinutesBeforeWave: 15,
-  checkinDurationMinutes: 3,
+  checkinDurationMinutes: 2,
 
   // 案内画面のタイミング
   loadingStartMinutesAfterWave: 5,
@@ -26,7 +26,7 @@ const CONFIG = {
   safeDriveDurationSeconds: 30,
 
   // 通常時：時計 → ポスター → 時計 → ポスター…
-  slideIntervalSeconds: 20,
+  slideIntervalSeconds: 10,
   alternateClockAndSlides: true,
 
   // 動作テスト用。通常運用はfalse。
