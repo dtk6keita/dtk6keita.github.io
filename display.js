@@ -49,7 +49,7 @@ const Display = {
   updateInfo(state) {
     const offerValue = document.getElementById("offerValue");
 
-    this.setText("offerLabel", state.offerIsNext ? "次回OFFER" : "現在のOFFER");
+    this.setText("offerLabel", "現在のOFFER");
     this.setText("offerValue", state.offerTime);
     this.setText("otdTime", state.otdTime);
     this.setText("nextCheckinTime", state.nextCheckinTime);

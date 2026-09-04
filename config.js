@@ -8,7 +8,7 @@ const CONFIG = {
     "18:00", "18:30",
     "19:00", "19:30",
     "20:00", "20:30",
-    "23:30", "23:45"
+    "00:00", "00:15"
   ],
 
   // 出庫目安 = OFFER + 15分
@@ -26,7 +26,7 @@ const CONFIG = {
   safeDriveDurationSeconds: 30,
 
   // 通常時：時計 → ポスター → 時計 → ポスター…
-  slideIntervalSeconds: 15,
+  slideIntervalSeconds: 20,
   alternateClockAndSlides: true,
 
   // 動作テスト用。通常運用はfalse。
@@ -47,7 +47,7 @@ const CONFIG = {
       text: "受付開始\n速やかにカウンターまで\nお越しください"
     },
     loading: {
-      title: "ALERT",
+      title: "誘導員に従ってください",
       text: "出庫まで残り5分程です\n出発の準備を整えましょう"
     },
     depart: {
