@@ -4,20 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>DTK6 Departure Information</title>
+  <meta name="theme-color" content="#EEF1F4">
+  <title>DTK6 Departure Information V12</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="mode-normal">
   <div id="app">
     <header id="header">
-      <div class="brand"><span class="brand-main">DTK6</span><span class="brand-sub">DEPARTURE INFORMATION</span></div>
+      <div class="brand">
+        <span class="brand-main">DTK6</span>
+        <span class="brand-sub">DEPARTURE INFORMATION</span>
+      </div>
+
+      <div id="headerInfo" aria-label="運行情報">
+        <div class="headerCard offerCard">
+          <span id="offerLabel" class="headerLabel">現在のOFFER</span>
+          <span id="offerValue" class="headerValue">--:--</span>
+        </div>
+        <div class="headerCard otdCard">
+          <span class="headerLabel">出庫目安時間</span>
+          <span id="otdTime" class="headerValue otdValue">--:--</span>
+        </div>
+        <div class="headerCard nextCard">
+          <span class="headerLabel">次のチェックイン</span>
+          <span id="nextCheckinTime" class="headerValue nextValue">--:--</span>
+        </div>
+      </div>
+
       <div class="live">● LIVE</div>
       <div id="demoBadge" aria-live="polite">DEMO</div>
-      <div id="offer" aria-label="現在のOFFER">
-        <span class="offer-label">現在のOFFER</span>
-        <span id="offerValue">--:--</span>
-        <span class="offer-unit">OFFER</span>
-      </div>
     </header>
 
     <div id="miniClock" aria-label="現在時刻">
@@ -27,28 +42,23 @@
     </div>
 
     <main id="main">
-      <section id="clockView" class="view active">
+      <section id="clockView" class="view active" aria-label="時計表示">
         <canvas id="clockCanvas"></canvas>
       </section>
 
-      <section id="slideView" class="view">
-        <img id="slideImage" src="" alt="DTK6案内スライド">
+      <section id="slideView" class="view" aria-label="ポスター表示">
+        <img id="slideImage" src="" alt="DTK6案内ポスター">
         <div id="slidePlaceholder">
-          <div id="slideTitle">IMAGE</div>
+          <div id="slideTitle">POSTER</div>
           <div id="slideMessage">画像を読み込み中</div>
         </div>
       </section>
 
-      <section id="messageView" class="view">
+      <section id="messageView" class="view" aria-label="案内表示">
         <div id="messageStatus">CHECK-IN</div>
         <div id="messageText">受付開始</div>
       </section>
     </main>
-
-    <aside id="infoPanel">
-      <div class="infoBlock"><div class="label">出庫目安時刻</div><div id="otdTime">--:--</div></div>
-      <div class="infoBlock remainBlock"><div class="label">次のチェックイン開始時刻</div><div id="nextCheckinTime">--:--</div></div>
-    </aside>
   </div>
 
   <script src="config.js"></script>

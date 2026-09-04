@@ -3,16 +3,14 @@ const Scheduler = {
   demoBaseMinutes: null,
 
   toMinutes(time) {
-    const parts = time.split(":").map(Number);
+    const parts = String(time).split(":").map(Number);
     return parts[0] * 60 + parts[1] + (parts[2] || 0) / 60;
   },
 
   formatTime(totalMinutes) {
     totalMinutes = ((totalMinutes % 1440) + 1440) % 1440;
-
     const h = Math.floor(totalMinutes / 60);
     const m = Math.floor(totalMinutes % 60);
-
     return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
   },
 
@@ -20,24 +18,13 @@ const Scheduler = {
     if (CONFIG.demoMode) {
       if (!this.demoBaseReal) {
         this.demoBaseReal = Date.now();
-        this.demoBaseMinutes =
-          this.toMinutes(CONFIG.demoStartTime);
+        this.demoBaseMinutes = this.toMinutes(CONFIG.demoStartTime);
       }
-
-      const speed = Math.max(
-        0.1,
-        Number(CONFIG.demoSpeed || 1)
-      );
-
-      return this.demoBaseMinutes +
-        ((Date.now() - this.demoBaseReal) / 60000) * speed;
+      const speed = Math.max(0.1, Number(CONFIG.demoSpeed || 1));
+      return this.demoBaseMinutes + ((Date.now() - this.demoBaseReal) / 60000) * speed;
     }
-
     const now = new Date();
-
-    return now.getHours() * 60 +
-      now.getMinutes() +
-      now.getSeconds() / 60;
+    return now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
   },
 
   resetDemoClock() {
@@ -46,267 +33,120 @@ const Scheduler = {
   },
 
   sortedWaves() {
-    return (CONFIG.waves || [])
-      .slice()
-      .sort(
-        (a, b) =>
-          this.toMinutes(a) -
-          this.toMinutes(b)
-      );
+    return (CONFIG.waves || []).slice().sort((a, b) => this.toMinutes(a) - this.toMinutes(b));
   },
 
-  findWave() {
-    const now = this.nowMinutes();
-    const waves = this.sortedWaves();
-
-    if (!waves.length) {
-      return "--:--";
-    }
-
-    for (const wave of waves) {
-      const w = this.toMinutes(wave);
-
-      const start =
-        w -
-        CONFIG.checkinStartMinutesBeforeWave;
-
-      const end =
-        w +
-        CONFIG.departStartMinutesAfterWave +
-        CONFIG.departDurationMinutes +
-        CONFIG.safeDriveDurationSeconds / 60;
-
-      if (now >= start && now < end) {
-        return wave;
-      }
-    }
-
-    let latest = waves[0];
-
-    for (const wave of waves) {
-      if (now >= this.toMinutes(wave)) {
-        latest = wave;
-      }
-    }
-
-    return latest;
-  },
-
+  // 日付またぎを考慮した「次のWave」を取得
   findNextWave(currentWave) {
     const waves = this.sortedWaves();
-
-    if (!waves.length) {
-      return "--:--";
-    }
-
-    const idx =
-      waves.indexOf(currentWave);
-
-    if (
-      idx >= 0 &&
-      idx < waves.length - 1
-    ) {
-      return waves[idx + 1];
-    }
-
+    if (!waves.length) return "--:--";
+    const idx = waves.indexOf(currentWave);
+    if (idx >= 0 && idx < waves.length - 1) return waves[idx + 1];
     return waves[0];
+  },
+
+  // 現在Waveを決める。
+  // V12重要：どのWaveのCHECK-IN中でも、CHECK-INを最優先する。
+  // これにより「前WaveのSAFE DRIVE」と「次WaveのCHECK-IN」が重なる時間でも
+  // 必ずCHECK-IN画面が表示される。
+  findWaveAndMode() {
+    const now = this.nowMinutes();
+    const waves = this.sortedWaves();
+    if (!waves.length) return { wave: "--:--", mode: "normal" };
+
+    // ① CHECK-INを最優先
+    for (const wave of waves) {
+      const w = this.toMinutes(wave);
+      const start = w - CONFIG.checkinStartMinutesBeforeWave;
+      const end = start + CONFIG.checkinDurationMinutes;
+      if (now >= start && now < end) {
+        return { wave, mode: "checkin" };
+      }
+    }
+
+    // ② CHECK-IN以外の現在Waveを判定
+    for (const wave of waves) {
+      const w = this.toMinutes(wave);
+      const loadingStart = w + CONFIG.loadingStartMinutesAfterWave;
+      const departStart = w + CONFIG.departStartMinutesAfterWave;
+      const departEnd = departStart + CONFIG.departDurationMinutes;
+      const safeEnd = departEnd + CONFIG.safeDriveDurationSeconds / 60;
+
+      if (now >= loadingStart && now < departStart) return { wave, mode: "loading" };
+      if (now >= departStart && now < departEnd) return { wave, mode: "depart" };
+      if (now >= departEnd && now < safeEnd) return { wave, mode: "safe" };
+    }
+
+    // ③ 通常時は直近のWaveを現在Waveとして扱う
+    let latest = waves[0];
+    for (const wave of waves) {
+      if (now >= this.toMinutes(wave)) latest = wave;
+    }
+    return { wave: latest, mode: "normal" };
   },
 
   getState() {
     const now = this.nowMinutes();
-
-    const wave = this.findWave();
+    const result = this.findWaveAndMode();
+    const wave = result.wave;
+    const mode = result.mode;
 
     if (wave === "--:--") {
       return {
-        wave: "--:--",
+        wave,
         nextWave: "--:--",
         mode: "normal",
-        otdTime: "--:--",
         offerTime: "--:--",
         offerIsNext: false,
-        remaining: "00:00",
-        nextCheckinTime: "--:--"
+        otdTime: "--:--",
+        nextCheckinTime: "--:--",
+        remaining: "00:00"
       };
     }
 
-    const w =
-      this.toMinutes(wave);
+    const w = this.toMinutes(wave);
+    const otdTime = w + CONFIG.otdMinutes - CONFIG.dtk6BufferMinutes;
+    const nextWave = this.findNextWave(wave);
+    const nextW = this.toMinutes(nextWave);
 
-    /*
-     * 現在Waveのチェックイン
-     */
-    const checkinStart =
-      w -
-      CONFIG.checkinStartMinutesBeforeWave;
+    let gapToNext = nextW - w;
+    if (gapToNext <= 0) gapToNext += 1440;
 
-    const checkinEnd =
-      checkinStart +
-      CONFIG.checkinDurationMinutes;
+    const nextOtdTime = nextW + CONFIG.otdMinutes - CONFIG.dtk6BufferMinutes;
+    const displayOtdTime = gapToNext >= 30 ? nextOtdTime : otdTime;
+    const nextCheckinStart = nextW - CONFIG.checkinStartMinutesBeforeWave;
 
-    /*
-     * 積込み開始
-     */
-    const loadingStart =
-      w +
-      CONFIG.loadingStartMinutesAfterWave;
+    // CHECK-IN中は、そのWaveを現在OFFERとして扱う。
+    // それ以外でOFFER/出庫目安が終了した後は次回OFFERを表示。
+    const currentOfferStart = w - CONFIG.checkinStartMinutesBeforeWave;
+    const safeEnd = w + CONFIG.departStartMinutesAfterWave + CONFIG.departDurationMinutes + CONFIG.safeDriveDurationSeconds / 60;
+    let offerIsNext = false;
+    let offerTime = wave;
 
-    /*
-     * 出庫開始
-     */
-    const departStart =
-      w +
-      CONFIG.departStartMinutesAfterWave;
-
-    /*
-     * 出庫終了
-     */
-    const departEnd =
-      departStart +
-      CONFIG.departDurationMinutes;
-
-    /*
-     * SAFE DRIVE終了
-     */
-    const safeEnd =
-      departEnd +
-      CONFIG.safeDriveDurationSeconds / 60;
-
-    /*
-     * 次のWave
-     */
-    const nextWave =
-      this.findNextWave(wave);
-
-    const nextWaveMinutes =
-      this.toMinutes(nextWave);
-
-    /*
-     * 次のWaveのチェックイン開始時刻
-     *
-     * 現在のOFFER中でも、
-     * 常に次のWaveのチェックイン開始時刻を表示
-     */
-    const nextCheckinStart =
-      nextWaveMinutes -
-      CONFIG.checkinStartMinutesBeforeWave;
-
-    /*
-     * SAFE DRIVE終了後から
-     * 次のWave開始まで
-     *
-     * 「次回OFFER」を表示
-     */
-    const offerIsNext =
-      now >= safeEnd &&
-      now < nextWaveMinutes;
-
-    /*
-     * 表示するOFFER
-     */
-    const offerMinutes =
-      offerIsNext
-        ? nextWaveMinutes
-        : w;
-
-    const offerTime =
-      this.formatTime(offerMinutes);
-
-    /*
-     * 出庫目安
-     *
-     * 表示しているOFFERの15分後
-     */
-    const otdTime =
-      offerMinutes + 15;
-
-    /*
-     * 出庫目安までの残り時間
-     */
-    let remainSec =
-      Math.floor(
-        (otdTime - now) * 60
-      );
-
-    if (remainSec < 0) {
-      remainSec = 0;
+    // CHECK-IN開始からSAFE DRIVE終了までは現在OFFER。
+    // SAFE DRIVE終了後は次回OFFERへ切り替え、次のCHECK-IN開始時に現在OFFERへ戻す。
+    if (now >= currentOfferStart && now < safeEnd) {
+      offerIsNext = false;
+      offerTime = wave;
+    } else if (now >= safeEnd) {
+      offerIsNext = true;
+      offerTime = nextWave;
     }
 
-    const rm =
-      Math.floor(
-        remainSec / 60
-      );
-
-    const rs =
-      remainSec % 60;
-
-    /*
-     * モード判定
-     */
-    let mode = "normal";
-
-    if (
-      now >= checkinStart &&
-      now < checkinEnd
-    ) {
-      mode = "checkin";
-    }
-    else if (
-      now >= loadingStart &&
-      now < departStart
-    ) {
-      mode = "loading";
-    }
-    else if (
-      now >= departStart &&
-      now < departEnd
-    ) {
-      mode = "depart";
-    }
-    else if (
-      now >= departEnd &&
-      now < safeEnd
-    ) {
-      mode = "safe";
-    }
+    let remainSec = Math.floor((otdTime - now) * 60);
+    if (remainSec < 0) remainSec = 0;
+    const rm = Math.floor(remainSec / 60);
+    const rs = remainSec % 60;
 
     return {
-      wave: wave,
-
-      nextWave: nextWave,
-
-      mode: mode,
-
-      /*
-       * 出庫目安
-       * OFFER + 15分
-       */
-      otdTime:
-        this.formatTime(otdTime),
-
-      /*
-       * 現在OFFER / 次回OFFER
-       */
-      offerTime:
-        offerTime,
-
-      /*
-       * 次回OFFER表示中か
-       */
-      offerIsNext:
-        offerIsNext,
-
-      /*
-       * 出庫目安までの残り
-       */
-      remaining:
-        `${String(rm).padStart(2, "0")}:${String(rs).padStart(2, "0")}`,
-
-      /*
-       * 次のWaveのチェックイン開始時刻
-       */
-      nextCheckinTime:
-        this.formatTime(nextCheckinStart)
+      wave,
+      nextWave,
+      mode,
+      offerTime,
+      offerIsNext,
+      otdTime: this.formatTime(displayOtdTime),
+      remaining: `${String(rm).padStart(2, "0")}:${String(rs).padStart(2, "0")}`,
+      nextCheckinTime: this.formatTime(nextCheckinStart)
     };
   }
 };

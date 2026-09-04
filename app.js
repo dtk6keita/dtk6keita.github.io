@@ -13,11 +13,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const refreshDemoBadge = () => {
     if (!demoBadge) return;
     demoBadge.classList.toggle("active", !!CONFIG.demoMode);
-    demoBadge.textContent = CONFIG.demoMode ? `DEMO ×${CONFIG.demoSpeed}` : "DEMO";
+    demoBadge.textContent = CONFIG.demoMode ? `DEMO ×${CONFIG.demoSpeed || 1}` : "DEMO";
   };
   refreshDemoBadge();
 
-  // PCでの確認用：DキーでDEMO ON/OFF、Rキーで開始時刻へリセット。
+  // PCでの確認用：D = DEMO ON/OFF、R = DEMO時刻へリセット
   document.addEventListener("keydown", (event) => {
     if (event.key.toLowerCase() === "d") {
       CONFIG.demoMode = !CONFIG.demoMode;
@@ -34,8 +34,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   if (window.FireStickNoSleep) FireStickNoSleep.init();
+
   new SBBClock("clockCanvas");
-  new SBBClock("miniClockCanvas", null, "miniDigitalClock");
+  new SBBClock("miniClockCanvas", "miniDigitalClock");
   Display.init();
 
   function loop() {

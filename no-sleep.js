@@ -49,7 +49,11 @@ const FireStickNoSleep = {
         window.focus();
         window.scrollBy(0, 1);
         window.scrollBy(0, -1);
-        document.dispatchEvent(new MouseEvent("mousemove", { bubbles: true, clientX: 1, clientY: 1 }));
+        document.dispatchEvent(new MouseEvent("mousemove", {
+          bubbles: true,
+          clientX: 1,
+          clientY: 1
+        }));
       } catch (e) {}
     }, 240000);
   },
@@ -58,6 +62,7 @@ const FireStickNoSleep = {
     this.requestWakeLock();
     this.startVideoKeepAlive();
     this.startActivityPulse();
+
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState === "visible") this.requestWakeLock();
     });
