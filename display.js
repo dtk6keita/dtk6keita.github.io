@@ -54,7 +54,7 @@ const Display = {
     this.setText("otdTime", state.otdTime);
     this.setText("nextCheckinTime", state.nextCheckinTime);
 
-    if (offerValue) offerValue.style.color = state.offerIsNext ? "#18A7C7" : "#20242A";
+    if (offerValue) offerValue.style.color = state.offerIsNext ? "#18A7C7" : "#1B9A4A";
   },
 
   showMessage(mode) {

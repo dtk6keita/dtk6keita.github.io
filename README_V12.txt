@@ -42,3 +42,6 @@ images/imageA.png / imageB.png / imageC.png を同じファイル名で差し替
 
 
 V12修正版: 運行案内画面はV9の色分け（CHECK-IN=青 / 残り5分=黄 / DEPART NOW=オレンジ / SAFE DRIVE=緑）を維持。出庫目安時間は表示中のOFFERに必ず対応します。
+
+
+【最終修正】現在のOFFER時刻はLIVEと同じ緑色、次回OFFER時刻は水色。

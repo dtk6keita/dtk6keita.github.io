@@ -25,7 +25,7 @@ body{color:#20242A;font-family:Arial,"Helvetica Neue","Noto Sans JP",sans-serif;
 .otdCard{border-color:#F0A0A0;background:#FFF8F8}
 .otdValue{color:#FF2B2B!important;text-shadow:0 1px 0 rgba(255,255,255,.8)}
 .nextValue{color:#1497B5!important}
-.offerCard #offerValue{color:#20242A}
+.offerCard #offerValue{color:#1B9A4A!important}
 .live{position:absolute;right:22px;top:9px;font-size:12px;font-weight:950;color:#1B9A4A;letter-spacing:.5px}
 #demoBadge{display:none;position:absolute;right:20px;bottom:7px;font-size:11px;font-weight:900;color:#7A4B00}
 #demoBadge.active{display:block}
