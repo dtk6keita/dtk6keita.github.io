@@ -1,6 +1,7 @@
 const CONFIG = {
   // 対象Wave
   waves: [
+    "02:15", "02:30",
     "09:00", "09:15", "09:30", "09:45",
     "10:00", "10:15", "10:30", "10:45",
     "11:00", "11:15", "11:30", "11:45",
@@ -25,7 +26,7 @@ const CONFIG = {
   safeDriveDurationSeconds: 30,
 
   // 通常時：時計 → ポスター → 時計 → ポスター…
-  slideIntervalSeconds: 15,
+  slideIntervalSeconds: 20,
   alternateClockAndSlides: true,
 
   // 動作テスト用。通常運用はfalse。
@@ -46,7 +47,7 @@ const CONFIG = {
       text: "受付開始\n速やかにカウンターまで\nお越しください"
     },
     loading: {
-      title: "誘導員に従ってください",
+      title: "ALERT",
       text: "出庫まで残り5分程です\n出発の準備を整えましょう"
     },
     depart: {

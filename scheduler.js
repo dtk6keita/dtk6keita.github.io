@@ -113,7 +113,6 @@ const Scheduler = {
     if (gapToNext <= 0) gapToNext += 1440;
 
     const nextOtdTime = nextW + CONFIG.otdMinutes - CONFIG.dtk6BufferMinutes;
-    const displayOtdTime = gapToNext >= 30 ? nextOtdTime : otdTime;
     const nextCheckinStart = nextW - CONFIG.checkinStartMinutesBeforeWave;
 
     // CHECK-IN中は、そのWaveを現在OFFERとして扱う。
@@ -133,7 +132,11 @@ const Scheduler = {
       offerTime = nextWave;
     }
 
-    let remainSec = Math.floor((otdTime - now) * 60);
+    // 「出庫目安時間」は、必ずヘッダーに表示しているOFFERに対応させる。
+    // 現在のOFFERなら現在Wave+15分、次回OFFERなら次Wave+15分。
+    const displayedOtdTime = offerIsNext ? nextOtdTime : otdTime;
+
+    let remainSec = Math.floor((displayedOtdTime - now) * 60);
     if (remainSec < 0) remainSec = 0;
     const rm = Math.floor(remainSec / 60);
     const rs = remainSec % 60;
@@ -144,7 +147,7 @@ const Scheduler = {
       mode,
       offerTime,
       offerIsNext,
-      otdTime: this.formatTime(displayOtdTime),
+      otdTime: this.formatTime(displayedOtdTime),
       remaining: `${String(rm).padStart(2, "0")}:${String(rs).padStart(2, "0")}`,
       nextCheckinTime: this.formatTime(nextCheckinStart)
     };

@@ -39,3 +39,6 @@ URL例: ?demo=1&time=17:04:50&speed=20
 
 【画像差し替え】
 images/imageA.png / imageB.png / imageC.png を同じファイル名で差し替えれば、コード変更なしでポスターを更新できます。
+
+
+V12修正版: 運行案内画面はV9の色分け（CHECK-IN=青 / 残り5分=黄 / DEPART NOW=オレンジ / SAFE DRIVE=緑）を維持。出庫目安時間は表示中のOFFERに必ず対応します。
