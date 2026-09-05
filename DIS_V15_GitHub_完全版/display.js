@@ -14,9 +14,6 @@ const Display = {
     };
 
     this.slideImage = document.getElementById("slideImage");
-    this.slidePlaceholder = document.getElementById("slidePlaceholder");
-    this.slideTitle = document.getElementById("slideTitle");
-    this.slideMessage = document.getElementById("slideMessage");
 
     this.preloadSlides();
     this.showView("clock");
@@ -72,33 +69,16 @@ const Display = {
     }
 
     const slide = slides[this.slideIndex % slides.length];
-    const preload = this.preloaded[this.slideIndex % this.preloaded.length];
     this.slideIndex = (this.slideIndex + 1) % slides.length;
 
-    // タイトル・「読み込み中」の画面は表示しない。
-    // 画像が完全に読み込まれてから、一気にポスターへ切り替える。
     if (this.slideImage) {
-      this.slideImage.onload = () => {
-        this.slideImage.style.display = "block";
-        this.showView("slide");
-      };
-      this.slideImage.onerror = () => {
-        // 読み込み失敗時もタイトル画面は出さず、時計を維持。
-        this.slideImage.style.display = "none";
-        this.showView("clock");
-      };
-
-      this.slideImage.style.display = "none";
-
-      if (preload && preload.complete && preload.naturalWidth > 0) {
-        this.slideImage.src = preload.src;
-        this.slideImage.style.display = "block";
-        this.showView("slide");
-      } else {
-        this.slideImage.src = slide.src;
-        // onloadでのみslideViewへ切り替える。
-      }
+      // タイトル/読み込み中画面は一切表示しない。事前ロード済み画像をそのまま表示。
+      const preloaded = this.preloaded.find(img => img.src.endsWith(slide.src));
+      this.slideImage.style.display = "block";
+      this.slideImage.src = preloaded && preloaded.complete ? preloaded.src : slide.src;
     }
+
+    this.showView("slide");
   },
 
   updateMainView(state) {

@@ -1,4 +1,4 @@
-DTK6 DIS V12 / GitHub Pages 完全版
+DTK6 DIS V15 / GitHub Pages 完全版
 
 【アップロード】
 このフォルダの中身をGitHubリポジトリ直下へアップロードしてください。
@@ -18,7 +18,7 @@ ZIPそのものではなく、index.htmlがリポジトリ直下にある状態�
 - images/imageB.png
 - images/imageC.png
 
-【V12変更点】
+【V15変更点】
 1. ヘッダーの情報順を「現在のOFFER → 出庫目安時間 → 次のチェックイン」に変更。
 2. 出庫目安時間を明るい赤色で表示。
 3. 現在時刻（デジタル＋小型アナログ）は右上を維持。
@@ -41,7 +41,7 @@ URL例: ?demo=1&time=17:04:50&speed=20
 images/imageA.png / imageB.png / imageC.png を同じファイル名で差し替えれば、コード変更なしでポスターを更新できます。
 
 
-V12修正版: 運行案内画面はV9の色分け（CHECK-IN=青 / 残り5分=黄 / DEPART NOW=オレンジ / SAFE DRIVE=緑）を維持。出庫目安時間は表示中のOFFERに必ず対応します。
+V15修正版: 運行案内画面はV9の色分け（CHECK-IN=青 / 残り5分=黄 / DEPART NOW=オレンジ / SAFE DRIVE=緑）を維持。出庫目安時間は表示中のOFFERに必ず対応します。
 
 
 【最終修正】現在のOFFER時刻はLIVEと同じ緑色、次回OFFER時刻は水色。
@@ -56,3 +56,8 @@ V12修正版: 運行案内画面はV9の色分け（CHECK-IN=青 / 残り5分=�
 V14: CHECK-IN 15分前。現在のOFFERはOFFER-15分～OFFER+15分の30分間。次のチェックインは次OFFER-15分。画面モードはV9系の全画面カラー切替へ復帰。ALERT表示なし。
 
 V14検証済み：17:30 OFFERは17:15～17:45に現在OFFER 17:30、次のチェックインは17:30。CHECK-INは各OFFERの15分前。
+
+
+V15変更点
+- ポスター切替時に「IMAGE」「画像を読み込み中」などのタイトル画面を表示しない。画像が読み込み完了してから表示。
+- CHECK-IN開始をOFFERの15分前に統一。例：17:15 OFFER → 17:00から青いCHECK-IN画面。

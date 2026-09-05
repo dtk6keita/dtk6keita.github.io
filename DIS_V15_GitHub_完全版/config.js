@@ -34,7 +34,7 @@ const CONFIG = {
   demoStartTime: "17:04:50",
   demoSpeed: 1,
 
-  // V12では既存ポスターを優先して使用。3枚目は15分前着車案内。
+  // V15: 既存ポスターを使用。3枚目は15分前着車案内。
   slides: [
     { src: "images/imageA.png", title: "All In All Out" },
     { src: "images/imageB.png", title: "正しく集荷して、エラーゼロへ" },
