@@ -39,7 +39,8 @@ const CONFIG = {
     { src: "images/imageA.png", title: "All In All Out" },
     { src: "images/imageB.png", title: "正しく集荷して、エラーゼロへ" },
     { src: "images/imageC.png", title: "15分前から着車OK" },
-    { src: "images/imageD.jpg", title: "構内運転ルール" }
+    { src: "images/imageD.jpg", title: "構内運転ルール" },
+    { src: "images/imageE.png", title: "RBルール" }
   ],
 
   messages: {
